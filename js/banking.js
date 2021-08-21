@@ -9,58 +9,49 @@ function amount(inputId) {
     return amountNumber;
 }
 
+function totalCalculation(inputId, newAmountNumber) {
+    const currentAmount = document.getElementById(inputId);
+    const currentAmountText = currentAmount.innerText;
+    const currentAmountNumber = parseFloat(currentAmountText);
+
+    const newAmount = currentAmountNumber + newAmountNumber;
+    currentAmount.innerText = newAmount;
+}
+
+function currentBalance() {
+    const currentBalance = document.getElementById('balance_total');
+    const currentBalanceText = currentBalance.innerText;
+    const currentBalanceNumber = parseFloat(currentBalanceText);
+    return currentBalanceNumber;
+}
+
+function balanceCalculation(newAmountNumber) {
+    const currentBalance = document.getElementById('balance_total');
+    /* const currentBlanceText = currentBlance.innerText;
+    const currentBlanceNumber = parseFloat(currentBlanceText); */
+    const currentBalanceNumber = currentBalance();
+    const newBalanceTotal = newAmountNumber + currentBalanceNumber;
+    currentBalance.innerText = newBalanceTotal;
+}
+
 
 
 document.getElementById('deposit_btn').addEventListener('click', function () {
-    // const depositInputValue = document.getElementById('deposit_input');
-    // const depositAmount = depositInputValue.value;
-    // const depositAmountNumber = parseFloat(depositAmount);
-
     //Calling the function
-    const depositAmountNumber = amount('deposit_input');
-
-
-    const currentDeposit = document.getElementById('deposit_total');
-    const currentDepositText = currentDeposit.innerText;
-    const currentDepositNumber = parseFloat(currentDepositText);
-
-    const newDepositAmount = currentDepositNumber + depositAmountNumber;
-    currentDeposit.innerText = newDepositAmount;
-
-    //Increasing the main balance with the deposit
-
-    const currentBlance = document.getElementById('balance_total');
-    const currentBlanceText = currentBlance.innerText;
-    const currentBlanceNumber = parseFloat(currentBlanceText);
-
-    const newBalanceTotal = depositAmountNumber + currentBlanceNumber;
-    currentBlance.innerText = newBalanceTotal;
-
-
+    const newAmountNumber = amount('deposit_input');
+    if (newAmountNumber > 0) {
+        totalCalculation('deposit_total', newAmountNumber);
+        balanceCalculation(newAmountNumber);
+    }
 });
 
 //Calculating withdraw
 
 document.getElementById('withdraw_btn').addEventListener('click', function () {
-    // const withdrawInput = document.getElementById('withdraw_input');
-    // const withdrawInputValue = withdrawInput.value;
-    // const withdrawInputNumber = parseFloat(withdrawInputValue);
-
     const withdrawInputNumber = amount('withdraw_input');
-
-    const currentWithdrawValue = document.getElementById('withdraw_total');
-    const currentWithdrawText = currentWithdrawValue.innerText;
-    const currentWithdrawNumber = parseFloat(currentWithdrawText);
-
-    const newWithdrawTotal = withdrawInputNumber + currentWithdrawNumber;
-    currentWithdrawValue.innerText = newWithdrawTotal;
-
-    //Decreasing the main balance with the withdraw
-
-    const currentBlance = document.getElementById('balance_total');
-    const currentBlanceText = currentBlance.innerText;
-    const currentBlanceNumber = parseFloat(currentBlanceText);
-
-    const newBalanceTotal = currentBlanceNumber - withdrawInputNumber;
-    currentBlance.innerText = newBalanceTotal;
+    const currentBalance = currentBalance();
+    if (withdrawInputNumber > 0 && withdrawInputNumber <= currentBalance) {
+        totalCalculation('withdraw_total', withdrawInputNumber);
+        balanceCalculation(withdrawInputNumber * (-1));
+    }
 });
